@@ -1,12 +1,33 @@
+[project]
+name = "auto-prompt"
+version = "1.0.0"
+description = "Dynamic prompt optimization benchmark for LLM data extraction pipelines"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Ayush Kumar", email = "github.com/Ayush-o1" }]
+requires-python = ">=3.9"
+keywords = ["llm", "prompt-engineering", "benchmark", "gemini", "nlp"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+# ---------------------------------------------------------------------------
+# Tool configurations
+# ---------------------------------------------------------------------------
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = "test_*.py"
 python_classes = "Test*"
 python_functions = "test_*"
 addopts = "-v --tb=short --strict-markers"
+asyncio_mode = "auto"
 markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
-    "integration: marks tests as integration tests",
+    "integration: marks tests requiring a live API key",
 ]
 
 [tool.coverage.run]
@@ -14,6 +35,7 @@ source = ["src"]
 omit = ["tests/*", "**/__pycache__/*"]
 
 [tool.coverage.report]
+fail_under = 60
 exclude_lines = [
     "pragma: no cover",
     "def __repr__",
@@ -21,3 +43,7 @@ exclude_lines = [
     "raise NotImplementedError",
     "if __name__ == .__main__.:",
 ]
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"

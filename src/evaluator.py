@@ -13,7 +13,7 @@ class Evaluator:
     
     def calculate_metrics(self, results: List[ExtractedData]) -> dict:
         """Calculate performance metrics"""
-        results_df = pd.DataFrame([r.dict() for r in results])
+        results_df = pd.DataFrame([r.model_dump() for r in results])
         
         # FIX: Ensure review_id is string in results too
         results_df['review_id'] = results_df['review_id'].astype(str)

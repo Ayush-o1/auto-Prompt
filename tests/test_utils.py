@@ -15,10 +15,10 @@ class TestReview:
         assert review.review_id == "1"
         assert review.review_text == "Great product!"
     
-    def test_review_validation(self):
-        """Test Review validation"""
+    def test_review_validation_missing_field(self):
+        """Pydantic v2 raises ValidationError when a required field is missing."""
         with pytest.raises(Exception):
-            Review(review_id="", review_text="")
+            Review(review_id="123")  # review_text is missing — must raise
 
 class TestExtractedData:
     def test_extracted_data_creation(self):

@@ -1,21 +1,43 @@
-# Prompt template structure
+# AutoPrompt configuration
+# Modify this file to experiment with different prompt strategies.
+# Adding more candidates increases the search space without changing code.
+
+# Prompt template — {instruction}, {target_info}, and {text} are substituted at runtime.
 template: "{instruction} the {target_info} from this review: '{text}'"
 
-# Candidate pools for placeholders
+# ── Candidate pools ───────────────────────────────────────────────────────────
+# Each run samples one instruction + one target_info to form a prompt variant.
+# More candidates = richer search space = better chance of finding an optimal prompt.
+
 candidates:
   instruction:
     - "Extract"
     - "Identify"
-    - "List"
-  
+    - "Determine"
+    - "Pull out"
+    - "Parse and return"
+    - "Carefully analyze and extract"
+    - "In a structured JSON format, extract"
+    - "As a data extraction specialist, identify"
+
   target_info:
     - "product name and sentiment"
-    - "product, sentiment (positive/negative), and specific reason"
+    - "product, sentiment (positive/negative/neutral/mixed), and specific reason"
     - "what product is being reviewed and how the customer feels about it"
+    - "the reviewed item, the overall customer sentiment, and the primary reason given"
+    - "product name, sentiment label (one of: positive, negative, neutral, mixed), and a one-sentence reason"
 
-# Optimization settings - REDUCED FOR FREE TIER
-max_prompts_per_item: 2  # Changed from 5 to 2
-scoring_model: "models/gemini-2.0-flash-lite"  # Fast and efficient for free tier
-generator_model: "models/gemini-2.0-flash-lite"  
+# ── Model settings ────────────────────────────────────────────────────────────
+# generator_model: used for the main extraction calls
+# scoring_model: used for optional LLM-judge scoring (disabled on free tier)
+
+generator_model: "models/gemini-2.0-flash-lite"
+scoring_model: "models/gemini-2.0-flash-lite"
 temperature: 0.1
-use_llm_scoring: false  # Disable LLM scoring to save API calls
+
+# ── Optimization settings ─────────────────────────────────────────────────────
+# max_prompts_per_item: how many variants to try per review (higher = better but more API calls)
+# use_llm_scoring: enable LLM-judge scoring (uses extra API calls — disable on free tier)
+
+max_prompts_per_item: 3
+use_llm_scoring: false

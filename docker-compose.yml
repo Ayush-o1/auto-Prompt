@@ -1,20 +1,49 @@
 version: '3.8'
 
 services:
+  # ── Streamlit interactive demo ────────────────────────────────────────────
   autoprompt-app:
     build: .
-    container_name: autoprompt
+    container_name: autoprompt-streamlit
     ports:
       - "8501:8501"
     volumes:
       - ./results:/app/results
       - ./logs:/app/logs
       - ./.env:/app/.env
+      - autoprompt-db:/app/data
     environment:
       - PYTHONUNBUFFERED=1
     restart: unless-stopped
     command: streamlit run app.py --server.port=8501 --server.address=0.0.0.0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
+  # ── FastAPI REST API ──────────────────────────────────────────────────────
+  autoprompt-api:
+    build: .
+    container_name: autoprompt-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./logs:/app/logs
+      - ./.env:/app/.env
+      - autoprompt-db:/app/data
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DATABASE_URL=sqlite:////app/data/autoprompt.db
+    restart: unless-stopped
+    command: uvicorn src.api:app --host 0.0.0.0 --port 8000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ── Benchmark runner (manual profile) ────────────────────────────────────
   autoprompt-benchmark:
     build: .
     container_name: autoprompt-benchmark
@@ -27,3 +56,7 @@ services:
     command: python main.py
     profiles:
       - benchmark
+
+volumes:
+  autoprompt-db:
+    driver: local

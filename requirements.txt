@@ -1,14 +1,39 @@
+# Core LLM + AI
 google-generativeai>=0.7.0
-pandas>=2.0.0
+
+# Data modelling & validation
 pydantic>=2.0.0
+
+# Data processing
+pandas>=2.0.0
+
+# Configuration
 pyyaml>=6.0
 python-dotenv>=1.0.0
+
+# Logging & reliability
 loguru>=0.7.0
 tenacity>=8.2.0
-scikit-learn>=1.3.0
+
+# Visualisation (benchmark charts)
 matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Interactive demo
+streamlit>=1.28.0
+
+# Notebooks
+jupyter>=1.0.0
+
+# REST API
+fastapi>=0.110.0
+uvicorn[standard]>=0.29.0
+httpx>=0.27.0          # async HTTP client used in API integration tests
+
+# Database / persistence
+sqlalchemy>=2.0.0
+
+# Testing
 pytest>=7.4.0
 pytest-cov>=4.1.0
-streamlit>=1.28.0
-jupyter>=1.0.0
-seaborn>=0.12.0
+pytest-asyncio>=0.23.0
