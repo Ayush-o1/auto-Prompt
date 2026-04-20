@@ -1,8 +1,11 @@
-# Secrets
+# Secrets — never commit real credentials
 .env
 .env.*
 *.key
 *.secret
+
+# Keep the example template tracked
+!.env.example
 
 # Python
 __pycache__/
